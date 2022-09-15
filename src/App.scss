@@ -1,0 +1,85 @@
+#button {
+    display: inline-block;
+    background-color: #ff9800;
+    width: 50px;
+    height: 50px;
+    text-align: center;
+    border-radius: 4px;
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    transition: background-color 0.3s, opacity 0.5s, visibility 0.5s;
+    opacity: 0;
+    visibility: hidden;
+    z-index: 1000;
+    &::after {
+      content: "\f077";
+      font-family: FontAwesome;
+      font-weight: normal;
+      font-style: normal;
+      font-size: 2em;
+      line-height: 50px;
+      color: #fff;
+    }
+    &:hover {
+      cursor: pointer;
+      background-color: #333;
+    } 
+    &:active {
+      background-color: #555;
+    }
+    &.show {
+      opacity: 1;
+      visibility: visible;
+    }
+  }
+  header {
+    background-color: $c1-bg-c;
+    .container {
+      color: $c1-text-c;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 24px 10px 24px;
+      .logo {
+      }
+      .header-right {
+        display: flex;
+        justify-content: space-around;
+        gap: 10px;
+        align-items: center;
+        .icon {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+        }
+        .login {
+          a {
+            color: $c1-text-c;
+  
+            opacity: 0.7;
+            font-size: $c1-text-s;
+            font-weight: $c1-text-w;
+            transition: all 0.3s;
+            &:hover {
+              opacity: 1;
+            }
+          }
+        }
+        .register {
+          a {
+            color: $c1-text-c;
+            opacity: 0.7;
+            font-size: $c1-text-s; 
+            font-weight: $c1-text-w;
+            transition: all 0.3s;
+            &:hover {
+              opacity: 1;
+            }
+          }
+        }
+      }
+    }
+  }
+   
