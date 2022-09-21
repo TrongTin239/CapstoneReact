@@ -1,8 +1,22 @@
 import React from "react";
-import { useFormik } from "formik";
+import { useFormik, Field } from "formik";
 import * as Yup from "yup";
+import axios from "axios";
 
 export default function Register(props) {
+  const postApi = async (data) => {
+    try {
+      const result = await axios({
+        url: "https://shop.cyberlearn.vn/api/Users/signup",
+        method: "POST",
+        data: data,
+      });
+
+      console.log(result.data.content);
+    } catch (err) {
+      console.log(err.response.data.message);
+    }
+  };
   const phoneRegex = RegExp(
     /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/
   );
@@ -20,17 +34,29 @@ export default function Register(props) {
         .email("Invalid email!"),
       password: Yup.string()
         .required("This field cannot be blank!")
-        .min(6, "Password is at least 6 characters long!"),
-      passwordConfirm: Yup.string().required("This field cannot be blank!"),
+        .min(6, "Password is at least 6 characters long!")
+        .max(10, "Maximum 10 characters"),
+      passwordConfirm: Yup.string()
+        .required("This field cannot be blank!")
+        .oneOf([Yup.ref("password"), null], "Passwords must match!"),
       name: Yup.string().required("This field cannot be blank!"),
       phone: Yup.string()
         .required("This field cannot be blank!")
         .min(6, "Minimum 6 number!")
         .max(10, "Maximum 10 number!")
         .matches(phoneRegex, "Invalid phone number"),
+      gender: Yup.string().required("Please select gender!"),
     }),
     onSubmit: (values) => {
       console.log(values);
+      const data = {
+        email: values.email,
+        password: values.password,
+        name: values.name,
+        phone: values.phone,
+        gender: values.gender,
+      };
+      postApi(data);
     },
   });
   return (
@@ -120,25 +146,32 @@ export default function Register(props) {
           </div>
           <div className="form-group mt-4 d-flex align-items-center">
             <span>Gender</span>
-            <div className="ms-4 d-flex flex-column">
-              <input
-                type="radio"
-                id="male"
-                name="gender"
-                value="true"
-                style={{ accentColor: "#6200EE", width: 40, height: 40 }}
-              />
-              <label>Male</label>
-            </div>
-            <div className="ms-4 d-flex flex-column">
-              <input
-                type="radio"
-                id="female"
-                name="gender"
-                value="false"
-                style={{ accentColor: "#6200EE", width: 40, height: 40 }}
-              />
-              <label>Female</label>
+            <div role="group" className="d-flex align-items-center">
+              <div className="ms-4 d-flex flex-column">
+                <input
+                  type="radio"
+                  name="gender"
+                  value="true"
+                  style={{ accentColor: "#6200EE", width: 40, height: 40 }}
+                  onChange={frm.handleChange}
+                />
+                <label>Male</label>
+              </div>
+              <div className="ms-4 d-flex flex-column">
+                <input
+                  type="radio"
+                  name="gender"
+                  value="false"
+                  onChange={frm.handleChange}
+                  style={{ accentColor: "#6200EE", width: 40, height: 40 }}
+                />
+                <label>Female</label>
+              </div>
+              {frm.errors.gender ? (
+                <span className="ms-4 text-danger"> {frm.errors.gender}</span>
+              ) : (
+                ""
+              )}
             </div>
           </div>
           <div className="form-group mt-4">
