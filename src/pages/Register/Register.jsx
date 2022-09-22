@@ -1,15 +1,15 @@
 import React from "react";
-import { useFormik, Field } from "formik";
+import { useFormik } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
 
 export default function Register(props) {
-  const postApi = async (data) => {
+  const postApi = async (userLogin) => {
     try {
       const result = await axios({
         url: "https://shop.cyberlearn.vn/api/Users/signup",
         method: "POST",
-        data: data,
+        data: userLogin,
       });
 
       console.log(result.data.content);
@@ -49,14 +49,14 @@ export default function Register(props) {
     }),
     onSubmit: (values) => {
       console.log(values);
-      const data = {
+      const userLogin = {
         email: values.email,
         password: values.password,
         name: values.name,
         phone: values.phone,
         gender: values.gender,
       };
-      postApi(data);
+      postApi(userLogin);
     },
   });
   return (

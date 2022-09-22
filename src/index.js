@@ -1,24 +1,39 @@
-import React from "react";
+import React, { Profiler } from "react";
 import ReactDOM from "react-dom/client";
+import { Provider } from "react-redux";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
-import "./assets/style.scss";
 
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
+import { store } from "./redux/configStore";
 import Register from "./pages/Register/Register";
+import Login from "./pages/Login/Login";
 
+import { unstable_HistoryRouter as HistoryRouter } from "react-router-dom";
+import { createBrowserHistory } from "history";
+import Profile from "./pages/Profile/Profile";
+import "antd/dist/antd.css";
+import "./assets/style.scss";
+import OrderHistory from "./pages/Profile/OrderHistory";
+
+export const history = createBrowserHistory({ window });
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-  <BrowserRouter>
-    <Routes>
-      <Route path="" element={<App />}>
-        <Route path="/register" element={<Register />}></Route>
-      </Route>
-    </Routes>
-  </BrowserRouter>
+  <Provider store={store}>
+    <HistoryRouter history={history}>
+      <Routes>
+        <Route path="" element={<App />}>
+          <Route path="/login" element={<Login />}></Route>
+          <Route path="/register" element={<Register />}></Route>
+          <Route path="/profile" element={<Profile />}></Route>
+          <Route path="/orderhistory" element={<OrderHistory />}></Route>
+        </Route>
+      </Routes>
+    </HistoryRouter>
+  </Provider>
 );
 
 // If you want to start measuring performance in your app, pass a function

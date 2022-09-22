@@ -1,14 +1,33 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faShoppingCart } from "@fortawesome/free-solid-svg-icons";
+import { useSelector } from "react-redux";
 
 export default function Header() {
+  const { userLogin } = useSelector((state) => state.userReducer);
+
+  const renderLoginNavItem = () => {
+    if (!userLogin) {
+      return (
+        <NavLink className="nav-link" to="/login">
+          Login
+        </NavLink>
+      );
+    }
+    return (
+      <NavLink className="nav-link" to="/profile">
+        Hello <span className="text-uppercase">{userLogin.name}</span> !
+      </NavLink>
+    );
+  };
   return (
     <div className="container">
       <nav className="navbar navbar-expand-sm navbar-dark bg-black">
         <div className="container-fluid">
-          <a className="navbar-brand" href="#">
+          <NavLink className="navbar-brand" to="/">
             <img src="./img/image 3.png" alt="logo" />
-          </a>
+          </NavLink>
           <button
             className="navbar-toggler d-lg-none"
             type="button"
@@ -36,15 +55,11 @@ export default function Header() {
             <ul className="navbar-nav mt-2 mt-lg-0">
               <li className="nav-item">
                 <a className="nav-link" href="#">
-                  <i className="fa fa-shopping-cart"></i>
+                  <FontAwesomeIcon icon={faShoppingCart} />
                   <span className="">(1)</span>
                 </a>
               </li>
-              <li className="nav-item">
-                <a className="nav-link" href="#" aria-current="page">
-                  Login <span className="visually-hidden">(current)</span>
-                </a>
-              </li>
+              <li className="nav-item">{renderLoginNavItem()}</li>
               <li className="nav-item">
                 <NavLink className="nav-link" to="/register">
                   Register
