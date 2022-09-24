@@ -17,3 +17,10 @@ ul {
   padding: 0;
   list-style: none;
 }
+
+.nav.nav-tabs .nav-link {
+  color: #000000;
+}
+.nav.nav-tabs .nav-link.active {
+  color: #dd2aed;
+}

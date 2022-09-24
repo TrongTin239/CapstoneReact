@@ -17,7 +17,6 @@ import { createBrowserHistory } from "history";
 import Profile from "./pages/Profile/Profile";
 import "antd/dist/antd.css";
 import "./assets/style.scss";
-import OrderHistory from "./pages/Profile/OrderHistory";
 
 export const history = createBrowserHistory({ window });
 const root = ReactDOM.createRoot(document.getElementById("root"));
@@ -29,7 +28,6 @@ root.render(
           <Route path="/login" element={<Login />}></Route>
           <Route path="/register" element={<Register />}></Route>
           <Route path="/profile" element={<Profile />}></Route>
-          <Route path="/orderhistory" element={<OrderHistory />}></Route>
         </Route>
       </Routes>
     </HistoryRouter>

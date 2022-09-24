@@ -3,9 +3,12 @@ import React from "react";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { updateProfileApi } from "../../redux/reducers/userReducer";
+import OrderHistory from "./OrderHistory";
+import ProductFavorite from "./ProductFavorite";
 
 export default function Profile() {
   const { userLogin } = useSelector((state) => state.userReducer);
+  console.log(userLogin);
   const dispatch = useDispatch();
   const frm = useFormik({
     initialValues: {
@@ -22,7 +25,14 @@ export default function Profile() {
   });
   return (
     <div className="container my-5">
-      <h4 className="w-50 px-4 py-2 bg-success text-white">Profile</h4>
+      <h4
+        className="w-50 px-4 py-2  text-white"
+        style={{
+          background: "linear-gradient(180deg, #F21299 0%, #1B02B5 100%",
+        }}
+      >
+        Profile
+      </h4>
 
       <form
         className="my-5 d-flex align-items-center"
@@ -124,28 +134,32 @@ export default function Profile() {
 
       <nav>
         <div className="nav nav-tabs" id="nav-tab" role="tablist">
-          <a
-            className="nav-item nav-link active"
+          <button
+            className="nav-link active"
             id="nav-history-tab"
-            data-toggle="tab"
-            href="#nav-history"
+            data-bs-toggle="tab"
+            data-bs-target="#nav-history"
+            type="button"
             role="tab"
             aria-controls="nav-history"
             aria-selected="true"
+            style={{ fontWeight: 400, fontSize: 32 }}
           >
             Order History
-          </a>
-          <a
-            className="nav-item nav-link"
+          </button>
+          <button
+            className="nav-link"
             id="nav-favorite-tab"
-            data-toggle="tab"
-            href="#nav-favorite"
+            data-bs-toggle="tab"
+            data-bs-target="#nav-favorite"
+            type="button"
             role="tab"
             aria-controls="nav-favorite"
             aria-selected="false"
+            style={{ fontWeight: 400, fontSize: 32 }}
           >
             Favorite
-          </a>
+          </button>
         </div>
       </nav>
       <div className="tab-content" id="nav-tabContent">
@@ -155,7 +169,7 @@ export default function Profile() {
           role="tabpanel"
           aria-labelledby="nav-history-tab"
         >
-          ...
+          <OrderHistory />
         </div>
         <div
           className="tab-pane fade"
@@ -163,7 +177,7 @@ export default function Profile() {
           role="tabpanel"
           aria-labelledby="nav-favorite-tab"
         >
-          ...
+          <ProductFavorite />
         </div>
       </div>
     </div>

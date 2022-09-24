@@ -18,7 +18,7 @@ export default function Login() {
       email: Yup.string().required("Required!").email("Invalid email!"),
       password: Yup.string()
         .required("Required!")
-        .min(6, "Password must be having 6-10 characters!")
+        .min(1, "Password must be having 1-10 characters!")
         .max(10, "Password must be having 6-10 characters!"),
     }),
     onSubmit: (values) => {
@@ -63,14 +63,12 @@ export default function Login() {
           )}
         </div>
         <div className="form-group mt-4 d-flex justify-content-end align-items-center">
-          <NavLink
-            className="nav-link me-5 text-primary fw-bold"
-            to="/register"
-          >
+          <NavLink className="nav-link text-primary fw-bold " to="/register">
             Register now?
           </NavLink>
+          <div className="mx-5"></div>
           <button
-            className="btn text-uppercase text-white px-3 ms-5 rounded-pill"
+            className="btn text-uppercase text-white px-3  rounded-pill ms-5"
             style={{ backgroundColor: "#6200EE" }}
           >
             Login
@@ -78,7 +76,7 @@ export default function Login() {
         </div>
         <div className="form-group mt-4">
           <button
-            className="w-100 py-2 rounded d-flex justify-content-center align-items-center bg-primary text-white"
+            className="w-100 py-2 rounded d-flex justify-content-center align-items-center btn btn-primary text-white"
             style={{ border: "none" }}
           >
             <FontAwesomeIcon

@@ -93,3 +93,7 @@ export const updateProfileApi = (accessToken = getStore(ACCESS_TOKEN)) => {
     }
   };
 };
+
+export const getProductFavorite = (accessToken) => {
+  
+}
