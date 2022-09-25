@@ -4,14 +4,16 @@ import { useNavigate, NavLink } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getProduct, getProductApi } from "../../Redux/reducers/productReducer";
 
-import "./index.css";
+// import "./index.css";
 
 export default function Carousel() {
   // const [arrProduct, setArrProduct] = useState([]);
 
   const { arrProduct } = useSelector((state) => state.productReducer);
+  // console.log(arrProduct)
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
   const getAllProductApi = () => {
     const action = getProductApi();
     dispatch(action);
@@ -20,18 +22,52 @@ export default function Carousel() {
   useEffect(() => {
     getAllProductApi();
   }, []);
-  const renderProduct = () => {
+
+  const renderProductCarousel = () => {
     return arrProduct?.map((prod, index) => {
       return (
         <div
           key={index}
           className={`carousel-item  ${prod.id === 1 ? "active" : ""}`}
         >
-          <img src={prod.image} className=" ps-5 w-1000%" alt="..." />
+          <img src={prod.image} className=" ps-5 w-100%" alt="..." />
           <div className="item-info">
             <h3>{prod.name}</h3>
             <p>{prod.description}</p>
-            <button>Buy now</button>
+            <button
+              className=""
+              onClick={() => {
+                navigate(`/detail/${prod.id}`);
+              }}
+            >
+              Buy now
+            </button>
+          </div>
+        </div>
+      );
+    });
+  };
+  const renderProductFuture = () => {
+    return arrProduct?.map((prod, index) => {
+      return (
+        <div key={index} className="col-4 mt-5">
+          <div className="card">
+            <img
+              className="w-50"
+              src={prod.image}
+              alt="..."
+              style={{ marginLeft: "50%", transform: "translateX(-50%)" }}
+            />
+            <div className="card-body">
+              <p className="h3"> {prod.name} </p>
+              <p style={{ height: "50px" }}>{prod.shortDescription}</p>
+            </div>
+            <div className="p-2 col-button d-flex">
+              <NavLink className=" w-50 btn-buy text-center" to={`detail/${prod.id}`}>
+                Buy now
+              </NavLink>
+              <button className=" w-50 btn-price">{prod.price}$</button>
+            </div>
           </div>
         </div>
       );
@@ -46,7 +82,7 @@ export default function Carousel() {
       >
         <div id="carousel" className="carousel-inner">
           <div style={{ position: "relative" }}>
-            {renderProduct()}
+            {renderProductCarousel()}
 
             {/* <div className="carousel-item active  ">
               <a href="Index.html">
@@ -106,6 +142,13 @@ export default function Carousel() {
           <span className="carousel-control-next-icon" aria-hidden="true" />
           <span className="visually-hidden">Next</span>
         </button>
+      </div>
+      {/* Product future */}
+      <div className="product-future my-5">
+        <div className="container">
+          <h1>Product Feature</h1>
+          <div className="row">{renderProductFuture()}</div>
+        </div>
       </div>
     </div>
   );

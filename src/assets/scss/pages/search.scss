@@ -1,0 +1,37 @@
+.container {
+  p {
+  }
+  form {
+    input {
+      padding-left: 10px;
+      outline: none;
+      width: 300px;
+    }
+    button {
+      background-color: $c4-bgbt-c;
+      padding: 8px 15px;
+      border-radius: 20px;
+      color: $c1-text-c;
+    }
+  }
+  .mt-5 {
+
+    h2 {
+      background: linear-gradient(#f21299, #1b02b5);
+      padding: 7px 20px;
+      color: $c1-text-c;
+    }
+    .row {
+      p {
+      }
+      .col-3 {
+        margin-left: 10px;
+        background-color: rgba(33, 33, 33, 0.08);
+        padding: 5px;
+        .icon{
+            cursor: pointer;
+        }
+      }
+    }
+  }
+}

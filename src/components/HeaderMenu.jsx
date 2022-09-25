@@ -1,30 +1,77 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { NavLink, useNavigate } from "react-router-dom";
 
 export default function HeaderMenu() {
+  const navigate = useNavigate();
+  const { carts } = useSelector((state) => state.productReducer);
+  const { userLogin } = useSelector((state) => state.userReducer);
+  // console.log(userLogin);
+  const temp = carts.productOrder.length;
+  const [volumn, setVolumn] = useState(temp);
+  useEffect(() => {
+    setVolumn(temp);
+  }, [temp]);
+  // console.log(carts.productOrder.length);
+  const checkLogin = () => {
+    if (userLogin) {
+      return navigate("/carts");
+    } else {
+      alert("đăng nhâp để vào giỏ hàng");
+      return navigate("/login");
+    }
+  };
   return (
     <>
-      <header className=" bg-dark text-white  align-items-center">
+      <header
+        className="  text-white  align-items-center"
+        style={{ position: "sticky", zIndex: "10", top: "0" }}
+      >
         <div className=" container d-flex justify-content-between p-2  ">
           <div className="logo">
-            <a href="#" style={{ textDecoration: "none" }}>
+            <NavLink to={"/"} style={{ textDecoration: "none" }}>
               <img src="./img/image 3.png" alt="" />
-            </a>
+            </NavLink>
           </div>
           <div className="header-right d-flex align-items-center">
-            <div className="search  mx-1">
-              <img className=" mx-1" src="./img/search.png" alt="" />
-              <span>Search</span>
+            <div className="search d-flex align-items-center mx-1">
+              <img
+                className=" mx-1"
+                src="./img/search.png"
+                alt=""
+                style={{ cursor: "pointer" }}
+                onClick={() => {
+                  navigate(`/search`);
+                }}
+              />
+              <span
+                style={{ cursor: "pointer" }}
+                onClick={() => {
+                  navigate(`/search`);
+                }}
+              >
+                Search
+              </span>
             </div>
             <div className="icon  mx-1">
-              <a href="#" style={{ textDecoration: "none" }}>
-                <img className="mx-1" src="./img/giohang.png" alt="" />
-              </a>
-              (1)
+              <img
+                className="mx-1"
+                src="./img/giohang.png"
+                alt=""
+                style={{ cursor: "pointer" }}
+                onClick={() => {
+                  checkLogin();
+                }}
+              />
+              ({volumn})
             </div>
             <div className="login mx-1">
-              <a href="#" style={{ textDecoration: "none", color: "white" }}>
+              <NavLink
+                to={"/login"}
+                style={{ textDecoration: "none", color: "white" }}
+              >
                 Login
-              </a>
+              </NavLink>
             </div>
             <div className="register mx-1">
               <a
