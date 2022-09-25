@@ -3,10 +3,9 @@ import { useSelector } from "react-redux";
 
 export default function OrderHistory() {
   const { userLogin } = useSelector((state) => state.userReducer);
-  console.log(userLogin);
   return (
     <div className="my-5">
-      {userLogin.ordersHistory?.map((item) => {
+      {userLogin?.ordersHistory.map((item) => {
         return (
           <div key={item.id}>
             <p

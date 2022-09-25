@@ -2,21 +2,13 @@ import React from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
+import { signupApi } from "../../redux/reducers/userReducer";
+import { useDispatch, useSelector } from "react-redux";
 
-export default function Register(props) {
-  const postApi = async (userLogin) => {
-    try {
-      const result = await axios({
-        url: "https://shop.cyberlearn.vn/api/Users/signup",
-        method: "POST",
-        data: userLogin,
-      });
+export default function Register() {
+  
+  const dispatch = useDispatch();
 
-      console.log(result.data.content);
-    } catch (err) {
-      console.log(err.response.data.message);
-    }
-  };
   const phoneRegex = RegExp(
     /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/
   );
@@ -34,8 +26,8 @@ export default function Register(props) {
         .email("Invalid email!"),
       password: Yup.string()
         .required("This field cannot be blank!")
-        .min(6, "Password is at least 6 characters long!")
-        .max(10, "Maximum 10 characters"),
+        .min(3, "Password must be having 3-10 characters!")
+        .max(10, "Password must be having 3-10 characters!"),
       passwordConfirm: Yup.string()
         .required("This field cannot be blank!")
         .oneOf([Yup.ref("password"), null], "Passwords must match!"),
@@ -49,14 +41,14 @@ export default function Register(props) {
     }),
     onSubmit: (values) => {
       console.log(values);
-      const userLogin = {
+      const userData = {
         email: values.email,
         password: values.password,
         name: values.name,
         phone: values.phone,
         gender: values.gender,
       };
-      postApi(userLogin);
+      dispatch(signupApi(userData));
     },
   });
   return (

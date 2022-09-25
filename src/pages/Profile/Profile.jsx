@@ -1,26 +1,47 @@
 import { useFormik } from "formik";
-import React from "react";
+import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
-import { updateProfileApi } from "../../redux/reducers/userReducer";
+import {
+  getProfileApi,
+  updateProfileApi,
+} from "../../redux/reducers/userReducer";
 import OrderHistory from "./OrderHistory";
 import ProductFavorite from "./ProductFavorite";
+import * as Yup from "yup";
 
 export default function Profile() {
   const { userLogin } = useSelector((state) => state.userReducer);
   console.log(userLogin);
   const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(getProfileApi());
+  }, []);
+
   const frm = useFormik({
     initialValues: {
-      email: "",
+      email: userLogin?.email || "",
       password: "",
-      name: "",
-      phone: "",
-      gender: "",
+      name: userLogin?.name || "",
+      phone: userLogin?.phone || "",
+      gender: userLogin?.gender || "",
     },
+    validationSchema: Yup.object().shape({
+      name: Yup.string(),
+      phone: Yup.string(),
+      password: Yup.string()
+        .min(3, "Password must be having 3-10 characters!")
+        .max(10, "Password must be having 3-10 characters!"),
+      gender: Yup.string(),
+    }),
     onSubmit: (values) => {
       console.log(values);
-      dispatch(updateProfileApi(values));
+      const data = {};
+      for (let key in values) {
+        data[key] = values[key] ? values[key] : userLogin[key];
+      }
+      console.log(data);
+      dispatch(updateProfileApi(data));
     },
   });
   return (
@@ -41,7 +62,7 @@ export default function Profile() {
         <div className="form-group w-25 mb-5">
           <img
             className="w-100 rounded-circle"
-            src={userLogin.avatar}
+            src={userLogin?.avatar}
             alt="avatar"
           />
         </div>
@@ -53,20 +74,25 @@ export default function Profile() {
                 className="form-control"
                 id="email"
                 name="name"
-                placeholder={userLogin.email}
+                placeholder={userLogin?.email}
                 disabled
               />
             </div>
-            <div className="form-group mt-2">
+            <div className="form-group mt-3">
               <p>Phone</p>
               <input
                 className="form-control"
                 id="phone"
                 name="phone"
-                placeholder={userLogin.phone}
+                placeholder={userLogin?.phone}
                 onChange={frm.handleChange}
                 onBlur={frm.handleBlur}
               />
+              {frm.errors.phone ? (
+                <span className="text-danger">{frm.errors.phone}</span>
+              ) : (
+                ""
+              )}
             </div>
           </div>
           <div className="col-6">
@@ -76,12 +102,17 @@ export default function Profile() {
                 className="form-control"
                 id="name"
                 name="name"
-                placeholder={userLogin.name}
+                placeholder={userLogin?.name}
                 onChange={frm.handleChange}
                 onBlur={frm.handleBlur}
               />
+              {frm.errors.name ? (
+                <span className="text-danger">{frm.errors.name}</span>
+              ) : (
+                ""
+              )}
             </div>
-            <div className="form-group mt-2">
+            <div className="form-group mt-3">
               <p>Password</p>
               <input
                 className="form-control"
@@ -90,8 +121,13 @@ export default function Profile() {
                 onChange={frm.handleChange}
                 onBlur={frm.handleBlur}
               />
+              {frm.errors.password ? (
+                <span className="text-danger">{frm.errors.password}</span>
+              ) : (
+                ""
+              )}
             </div>
-            <div className="form-group mt-2 d-flex">
+            <div className="form-group mt-3 d-flex">
               <span>Gender</span>
               <div role="group" className="d-flex align-items-center">
                 <div className="ms-4 d-flex flex-column">
@@ -100,6 +136,7 @@ export default function Profile() {
                     name="gender"
                     value="true"
                     style={{ accentColor: "#6200EE", width: 40 }}
+                    defaultChecked={userLogin?.gender}
                     onChange={frm.handleChange}
                   />
                   <label>Male</label>
@@ -110,15 +147,21 @@ export default function Profile() {
                     name="gender"
                     value="false"
                     onChange={frm.handleChange}
+                    defaultChecked={!userLogin?.gender}
                     style={{ accentColor: "#6200EE", width: 40 }}
                   />
                   <label>Female</label>
                 </div>
+                {frm.errors.gender ? (
+                  <span className="text-danger">{frm.errors.gender}</span>
+                ) : (
+                  ""
+                )}
               </div>
             </div>
-            <div className="form-group d-flex justify-content-end">
+            <div className="form-group mt-3 d-flex justify-content-end">
               <button
-                className="btn rounded-pill text-white  px-3"
+                className="btn rounded-pill text-white px-3"
                 style={{ backgroundColor: "#6200EE" }}
                 type="submit"
               >
@@ -169,7 +212,7 @@ export default function Profile() {
           role="tabpanel"
           aria-labelledby="nav-history-tab"
         >
-          <OrderHistory />
+          <OrderHistory userLogin={userLogin} />
         </div>
         <div
           className="tab-pane fade"

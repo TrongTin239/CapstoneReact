@@ -10,9 +10,13 @@ import {
   USER_LOGIN,
 } from "../../utils/tools";
 import { history } from "../../index";
+import { useDispatch } from "react-redux";
 
 const initialState = {
   userLogin: getStoreJson(USER_LOGIN),
+  messRegister: {},
+  messLogin: {},
+  messUpdate: {},
 };
 
 const userReducer = createSlice({
@@ -22,15 +26,31 @@ const userReducer = createSlice({
     getProfileAction: (state, action) => {
       state.userLogin = action.payload;
     },
-    updateProfileAction: (state, action) => {
-      state.userLogin = action.payload;
+    getMessageLoginAction: (state, action) => {
+      state.messLogin = action.payload;
     },
   },
 });
 
-export const { getProfileAction, updateProfileAction } = userReducer.actions;
+export const { getProfileAction, getMessageLoginAction } = userReducer.actions;
 
 export default userReducer.reducer;
+
+export const signupApi = (userData) => {
+  return async (dispatch) => {
+    try {
+      const result = await axios({
+        url: "https://shop.cyberlearn.vn/api/Users/signup",
+        method: "POST",
+        data: userData,
+      });
+      console.log(result.data.content);
+      history.push("/login");
+    } catch (err) {
+      console.log(err.response.data.message);
+    }
+  };
+};
 
 export const loginApi = (userLogin) => {
   return async (dispatch) => {
@@ -46,8 +66,10 @@ export const loginApi = (userLogin) => {
 
       history.push("/profile");
       dispatch(getProfileApi());
+      
     } catch (err) {
-      console.log(err);
+      console.log(err.response.data.message);
+      dispatch(getMessageLoginAction( err.response.data));
     }
   };
 };
@@ -74,26 +96,24 @@ export const getProfileApi = (accessToken = getStore(ACCESS_TOKEN)) => {
   };
 };
 
-export const updateProfileApi = (accessToken = getStore(ACCESS_TOKEN)) => {
+export const updateProfileApi = (
+  updateData,
+  accessToken = getStore(ACCESS_TOKEN)
+) => {
   return async (dispatch) => {
     try {
       const result = await axios({
         url: "https://shop.cyberlearn.vn/api/Users/updateProfile",
         method: "POST",
-
         headers: {
           Authorization: "Bearer " + accessToken,
         },
+        data: updateData,
       });
       console.log(result);
-      const action = updateProfileAction(result.data.content);
-      dispatch(action);
+      dispatch(getProfileApi());
     } catch (err) {
       console.log(err);
     }
   };
 };
-
-export const getProductFavorite = (accessToken) => {
-  
-}

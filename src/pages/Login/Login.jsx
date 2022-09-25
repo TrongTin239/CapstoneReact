@@ -4,26 +4,27 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFacebook } from "@fortawesome/free-brands-svg-icons";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { useDispatch } from "react-redux";
-import { loginApi } from "../../redux/reducers/userReducer";
+import { useDispatch, useSelector } from "react-redux";
+import userReducer, { loginApi } from "../../redux/reducers/userReducer";
 
 export default function Login() {
+  const { messLogin } = useSelector((state) => state.userReducer);
   const dispatch = useDispatch();
+
   const frm = useFormik({
-    initialValues: {
-      email: "",
-      password: "",
-    },
+    initialValues: { email: "", password: "" },
     validationSchema: Yup.object().shape({
       email: Yup.string().required("Required!").email("Invalid email!"),
       password: Yup.string()
         .required("Required!")
-        .min(1, "Password must be having 1-10 characters!")
-        .max(10, "Password must be having 6-10 characters!"),
+        .min(3, "Password must be having 3-10 characters!")
+        .max(10, "Password must be having 3-10 characters!"),
     }),
-    onSubmit: (values) => {
+    onSubmit: (values, action) => {
       console.log(values);
       dispatch(loginApi(values));
+
+      action.resetForm({ values: "" });
     },
   });
   return (
@@ -31,6 +32,13 @@ export default function Login() {
       <h2>Login</h2>
       <hr />
       <div className="w-50 m-auto">
+        {messLogin ? (
+          <span className="text-danger " style={{ fontSize: 30 }}>
+            {messLogin.message}
+          </span>
+        ) : (
+          ""
+        )}
         <div className="form-group">
           <p>Email</p>
           <input
@@ -39,6 +47,7 @@ export default function Login() {
             name="email"
             onChange={frm.handleChange}
             onBlur={frm.handleBlur}
+            value={frm.values.email}
           />
           {frm.errors.email ? (
             <span className="text-danger">{frm.errors.email}</span>
@@ -55,6 +64,7 @@ export default function Login() {
             name="password"
             onChange={frm.handleChange}
             onBlur={frm.handleBlur}
+            value={frm.values.password}
           />
           {frm.errors.password ? (
             <span className="text-danger">{frm.errors.password}</span>
@@ -70,6 +80,7 @@ export default function Login() {
           <button
             className="btn text-uppercase text-white px-3  rounded-pill ms-5"
             style={{ backgroundColor: "#6200EE" }}
+            type="submit"
           >
             Login
           </button>

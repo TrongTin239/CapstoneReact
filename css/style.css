@@ -26,3 +26,7 @@ ul {
 .nav.nav-tabs .nav-link.active {
   color: #dd2aed;
 }
+
+.logout:hover {
+  font-weight: 500;
+}

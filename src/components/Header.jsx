@@ -2,23 +2,45 @@ import React from "react";
 import { NavLink } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faShoppingCart } from "@fortawesome/free-solid-svg-icons";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { getProfileAction, logout } from "../redux/reducers/userReducer";
+import { ACCESS_TOKEN, USER_LOGIN } from "../utils/tools";
 
 export default function Header() {
+  const dispatch = useDispatch();
   const { userLogin } = useSelector((state) => state.userReducer);
 
   const renderLoginNavItem = () => {
     if (!userLogin) {
       return (
-        <NavLink className="nav-link" to="/login">
-          Login
-        </NavLink>
+        <li className="nav-item">
+          <NavLink className="nav-link" to="/login">
+            Login
+          </NavLink>
+        </li>
       );
     }
     return (
-      <NavLink className="nav-link" to="/profile">
-        Hello <span className="text-uppercase">{userLogin.name}</span> !
-      </NavLink>
+      <li className="d-flex">
+        <div className="nav-item">
+          <NavLink className="nav-link" to="/profile">
+            Hello <span className="text-uppercase">{userLogin.name}</span> !
+          </NavLink>
+        </div>
+        <div className="nav-item logout">
+          <NavLink
+            className=" nav-link"
+            to="/"
+            onClick={() => {
+              localStorage.removeItem(ACCESS_TOKEN);
+              localStorage.removeItem(USER_LOGIN);
+              dispatch(getProfileAction());
+            }}
+          >
+            Log out
+          </NavLink>
+        </div>
+      </li>
     );
   };
   return (
@@ -54,12 +76,13 @@ export default function Header() {
             </form>
             <ul className="navbar-nav mt-2 mt-lg-0">
               <li className="nav-item">
-                <a className="nav-link" href="#">
+                <NavLink className="nav-link" to="#">
                   <FontAwesomeIcon icon={faShoppingCart} />
                   <span className="">(1)</span>
-                </a>
+                </NavLink>
               </li>
-              <li className="nav-item">{renderLoginNavItem()}</li>
+              {renderLoginNavItem()}
+
               <li className="nav-item">
                 <NavLink className="nav-link" to="/register">
                   Register
@@ -74,29 +97,29 @@ export default function Header() {
           <div className="collapse navbar-collapse" id="navbarNav">
             <ul className="navbar-nav">
               <li className="nav-item">
-                <a className="nav-link active" aria-current="page" href="#">
+                <NavLink className="nav-link active" aria-current="page" to="#">
                   Home
-                </a>
+                </NavLink>
               </li>
               <li className="nav-item">
-                <a className="nav-link" href="#">
+                <NavLink className="nav-link" to="#">
                   Men
-                </a>
+                </NavLink>
               </li>
               <li className="nav-item">
-                <a className="nav-link" href="#">
+                <NavLink className="nav-link" to="#">
                   Women
-                </a>
+                </NavLink>
               </li>
               <li className="nav-item">
-                <a className="nav-link" href="#">
+                <NavLink className="nav-link" to="#">
                   Kid
-                </a>
+                </NavLink>
               </li>
               <li className="nav-item">
-                <a className="nav-link" href="#">
+                <NavLink className="nav-link" to="#">
                   Sport
-                </a>
+                </NavLink>
               </li>
             </ul>
           </div>

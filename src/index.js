@@ -1,4 +1,4 @@
-import React, { Profiler } from "react";
+import React from "react";
 import ReactDOM from "react-dom/client";
 import { Provider } from "react-redux";
 import App from "./App";
@@ -15,7 +15,6 @@ import Login from "./pages/Login/Login";
 import { unstable_HistoryRouter as HistoryRouter } from "react-router-dom";
 import { createBrowserHistory } from "history";
 import Profile from "./pages/Profile/Profile";
-import "antd/dist/antd.css";
 import "./assets/style.scss";
 
 export const history = createBrowserHistory({ window });
