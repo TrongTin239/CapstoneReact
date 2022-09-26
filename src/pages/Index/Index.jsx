@@ -2,15 +2,23 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate, NavLink } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { getProduct, getProductApi } from "../../Redux/reducers/productReducer";
+import {
+  getProduct,
+  getProductApi,
+  getProductsFavoriteAction,
+} from "../../Redux/reducers/productReducer";
 
 // import "./index.css";
 
 export default function Carousel() {
   // const [arrProduct, setArrProduct] = useState([]);
 
-  const { arrProduct } = useSelector((state) => state.productReducer);
-  // console.log(arrProduct)
+  const { arrProduct, productsFavorite } = useSelector(
+    (state) => state.productReducer
+  );
+
+  let id = productsFavorite.map((item) => item.id);
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -22,6 +30,11 @@ export default function Carousel() {
   useEffect(() => {
     getAllProductApi();
   }, []);
+  const getProductsFavorite = (e) => {
+    // console.log(e);
+    const action = getProductsFavoriteAction(e);
+    dispatch(action);
+  };
 
   const renderProductCarousel = () => {
     return arrProduct?.map((prod, index) => {
@@ -58,12 +71,33 @@ export default function Carousel() {
               alt="..."
               style={{ marginLeft: "50%", transform: "translateX(-50%)" }}
             />
+
+            <img
+              className=""
+              src="./img/unfavorite.png"
+              alt="..."
+              style={{
+                width: "40px",
+                position: "absolute",
+                right: 0,
+                margin: "15px",
+                cursor: "pointer",
+              }}
+              onClick={() => {
+                let product = prod;
+
+                getProductsFavorite(product);
+              }}
+            />
             <div className="card-body">
               <p className="h3"> {prod.name} </p>
               <p style={{ height: "50px" }}>{prod.shortDescription}</p>
             </div>
             <div className="p-2 col-button d-flex">
-              <NavLink className=" w-50 btn-buy text-center" to={`detail/${prod.id}`}>
+              <NavLink
+                className=" w-50 btn-buy text-center"
+                to={`detail/${prod.id}`}
+              >
                 Buy now
               </NavLink>
               <button className=" w-50 btn-price">{prod.price}$</button>
@@ -81,48 +115,7 @@ export default function Carousel() {
         data-bs-ride="carousel"
       >
         <div id="carousel" className="carousel-inner">
-          <div style={{ position: "relative" }}>
-            {renderProductCarousel()}
-
-            {/* <div className="carousel-item active  ">
-              <a href="Index.html">
-                <img
-                  src="./img/image 4.png"
-                  className="d-block w-100"
-                  alt="..."
-                />
-              </a>
-              <div className="item-info">
-                <h3>Product name</h3>
-                <p>Product description ....</p>
-                <button>Buy now</button>
-              </div>
-            </div>
-            <div className="carousel-item">
-              <img
-                src="./img/image 4.png"
-                className="d-block w-100"
-                alt="..."
-              />
-              <div className="item-info">
-                <h3>Product name</h3>
-                <p>Product description ....</p>
-                <button>Buy now</button>
-              </div>
-            </div>
-            <div className="carousel-item">
-              <img
-                src="./img/image 4.png"
-                className="d-block w-100"
-                alt="..."
-              />
-              <div className="item-info">
-                <h3>Product name</h3>
-                <p>Product description ....</p>
-                <button>Buy now</button>
-              </div>
-            </div> */}
-          </div>
+          <div style={{ position: "relative" }}>{renderProductCarousel()}</div>
         </div>
         <button
           className="carousel-control-prev"

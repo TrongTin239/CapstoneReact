@@ -13,7 +13,7 @@ export default function Carts() {
   const { carts } = useSelector((state) => state.productReducer);
   const { userLogin } = useSelector((state) => state.userReducer);
   const email = userLogin.email;
-console.log(userLogin)
+  console.log(carts);
   const arr = [];
   let quantity = carts.productOrder?.map((item) => {
     return item.quantityOrder;

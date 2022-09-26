@@ -12,6 +12,7 @@ const initialState = {
     orderDetail: [],
     email: "trongtin3311@gmail.com",
   },
+  productsFavorite: [],
 };
 
 const productReducer = createSlice({
@@ -72,6 +73,24 @@ const productReducer = createSlice({
     clearCartsAction: (state, action) => {
       state.carts.productOrder = action.payload;
     },
+    getProductsFavoriteAction: (state, action) => {
+      let id = action.payload.id;
+      let index = state.productsFavorite.findIndex((item) => item.id === id);
+
+      if (index < 0) {
+        state.productsFavorite.push(action.payload);
+        localStorage.setItem(
+          "productFavourite",
+          JSON.stringify(state.productsFavorite)
+        );
+      } else if (index) {
+        state.productsFavorite.splice(index, 1);
+        localStorage.setItem(
+          "productFavourite",
+          JSON.stringify(state.productsFavorite)
+        );
+      }
+    },
   },
 });
 
@@ -82,6 +101,7 @@ export const {
   decreaseCart,
   deleteProductAction,
   clearCartsAction,
+  getProductsFavoriteAction,
 } = productReducer.actions;
 
 export default productReducer.reducer;
@@ -113,6 +133,22 @@ export const getProductDetail = (id) => {
       // console.log(result.data.content);
       const action = getProductDetailAction(result.data.content);
       // console.log(action);
+      dispatch(action);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+};
+
+export const getProductsFavoriteApi = () => {
+  return async (dispatch) => {
+    try {
+      let result = await axios({
+        url: "https://shop.cyberlearn.vn/api/Users/getproductfavorite",
+        method: "Get",
+      });
+      const action = getProductsFavoriteAction(result.data.content);
+      console.log(action);
       dispatch(action);
     } catch (err) {
       console.log(err);
